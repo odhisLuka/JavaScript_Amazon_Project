@@ -34,9 +34,9 @@
   border: 1px solid rgba(0, 0, 0, 0);
 }
 
-.header-link:hover {
+/* .header-link:hover {
   border: 1px solid white;
-}
+} */
 
 .amazon-logo {
   width: 100px;
