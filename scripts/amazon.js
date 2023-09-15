@@ -67,12 +67,18 @@ document.querySelectorAll(".js-add-to-cart-btn").forEach((button) => {
       }
     });
 
+    // when adding a product, instead of increasing the quantity by 1,
+    // we'll increase the quantity by the number in the selector
+    const selectorQty = Number(
+      document.querySelector(`.js-quantity-selector-${productId}`).value
+    );
+
     if (matchingItem) {
-      matchingItem.quantity += 1;
+      matchingItem.quantity += selectorQty;
     } else {
       cart.push({
         productId,
-        quantity: 1,
+        quantity: selectorQty,
       });
     }
     let cartQty = 0;
