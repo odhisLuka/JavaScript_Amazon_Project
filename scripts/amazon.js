@@ -1,3 +1,5 @@
+import { cart } from "../data/cart.js";
+
 // Use product data to generate HTML
 let productsHTML = "";
 products.forEach((product) => {
