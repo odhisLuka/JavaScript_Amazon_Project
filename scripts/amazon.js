@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js";
+import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 // Use product data to generate HTML
@@ -58,55 +58,38 @@ products.forEach((product) => {
 });
 document.querySelector(".products-grid").innerHTML = productsHTML;
 
+function updateCartQuantity() {
+  let cartQty = 0;
+  cart.forEach((cartItem) => {
+    cartQty += cartItem.quantity;
+  });
+  document.querySelector(".cart-quantity").innerHTML = cartQty;
+}
+
+function displayAddedMessage(productId) {
+  let addedMessageTimeoutId;
+  const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+  addedMessage.classList.add("added-to-cart-visible");
+
+  setTimeout(() => {
+    if (addedMessageTimeoutId) {
+      clearTimeout(addedMessageTimeoutId);
+    }
+
+    const timeoutId = setTimeout(() => {
+      addedMessage.classList.remove("added-to-cart-visible");
+    }, 1500);
+
+    addedMessageTimeoutId = timeoutId;
+  });
+}
+
 // make add to cart btn interactive
 document.querySelectorAll(".js-add-to-cart-btn").forEach((button) => {
-  let addedMessageTimeoutId;
-
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
-    let matchingItem;
-    cart.forEach((item) => {
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
-    });
-
-    // when adding a product, instead of increasing the quantity by 1,
-    // we'll increase the quantity by the number in the selector
-    const selectorQty = Number(
-      document.querySelector(`.js-quantity-selector-${productId}`).value
-    );
-
-    if (matchingItem) {
-      matchingItem.quantity += selectorQty;
-    } else {
-      cart.push({
-        productId,
-        quantity: selectorQty,
-      });
-    }
-    let cartQty = 0;
-    cart.forEach((item) => {
-      cartQty += item.quantity;
-    });
-    document.querySelector(".cart-quantity").innerHTML = cartQty;
-
-    // show added message
-    const addedMessage = document.querySelector(
-      `.js-added-to-cart-${productId}`
-    );
-    addedMessage.classList.add("added-to-cart-visible");
-
-    setTimeout(() => {
-      if (addedMessageTimeoutId) {
-        clearTimeout(addedMessageTimeoutId);
-      }
-
-      const timeoutId = setTimeout(() => {
-        addedMessage.classList.remove("added-to-cart-visible");
-      }, 1500);
-
-      addedMessageTimeoutId = timeoutId;
-    });
+    addToCart(productId);
+    updateCartQuantity();
+    displayAddedMessage(productId);
   });
 });
