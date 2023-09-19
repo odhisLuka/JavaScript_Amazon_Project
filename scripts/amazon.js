@@ -68,9 +68,12 @@ function updateCartQuantity() {
 
 function displayAddedMessage(productId) {
   let addedMessageTimeoutId;
+
+  // make message visible
   const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
   addedMessage.classList.add("added-to-cart-visible");
 
+  // make message appear and then disappear smoothly, after 1.5seconds
   setTimeout(() => {
     if (addedMessageTimeoutId) {
       clearTimeout(addedMessageTimeoutId);
