@@ -30,9 +30,35 @@ export function getDeliveryOption(deliveryOptionId) {
 
   return deliveryOption;
 }
+// checks if day is weekeend
+function isWeekend(date) {
+  const dayOfWeek = date.format("dddd");
+  return dayOfWeek === "Saturday" || dayOfWeek === "Sunday";
+}
+
+// make this function skip weekends
+
 export function calculateDeliveryDate(deliveryOption) {
+  /* 
   const today = dayjs();
   const deliveryDate = today.add(deliveryOption.deliveryDays, `days`);
+  */
+
+  // Get the number of days we need to add
+  // Use while loop and each time, add 1 day,
+  // then check if its the weekend and decrease the remaining days to add
+  // If the day is a weekend, skip decreasing the remaining days
+
+  let remainingDays = deliveryOption.deliveryDays;
+  let deliveryDate = dayjs();
+
+  while (remainingDays > 0) {
+    deliveryDate = deliveryDate.add(1, "day");
+
+    if (!isWeekend(deliveryDate)) {
+      remainingDays--;
+    }
+  }
   const dateString = deliveryDate.format(`dddd, MMMM D`);
   return dateString;
 }
